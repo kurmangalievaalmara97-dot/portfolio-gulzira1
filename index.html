@@ -1,0 +1,966 @@
+<!DOCTYPE html> 
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Портфолио | Мукамадиева Гульзира</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { light: '#0077b6', dark: '#00b4d8' },
+            gold: '#d4af37',
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .glass-nav {
+      background: rgba(255,255,255,.74);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.35);
+    }
+
+    .dark .glass-nav {
+      background: rgba(15,23,42,.78);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+
+    .glass-card {
+      background: rgba(255,255,255,.32);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.28);
+      transition: .35s;
+    }
+
+    .dark .glass-card {
+      background: rgba(30,41,59,.44);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 18px 35px rgba(0,119,182,.16);
+    }
+
+    #particleCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -5;
+      pointer-events: none;
+    }
+
+    .top-video-hero {
+      position: relative;
+      min-height: 72vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      isolation: isolate;
+    }
+
+    .top-video-hero video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -4;
+    }
+
+    .top-video-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(2,6,23,.88) 0%,
+        rgba(12,74,110,.58) 48%,
+        rgba(2,132,199,.22) 100%
+      );
+      z-index: -3;
+    }
+
+    .top-video-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 25%, rgba(212,175,55,.23), transparent 28%),
+        linear-gradient(to top, rgba(2,6,23,.78), transparent 50%);
+      z-index: -2;
+    }
+
+    .video-badge {
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.28);
+      backdrop-filter: blur(12px);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: #d4af37;
+      margin-left: 4px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%,49% { background:#d4af37; }
+      50%,100% { background:transparent; }
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(5deg); }
+    }
+
+    .floating-svg { animation: float 4s ease-in-out infinite; }
+    .floating-svg-delayed { animation: float 5s ease-in-out infinite 1.5s; }
+
+    @keyframes pulseBlob {
+      0%,100% { transform: scale(1) translate(0,0); }
+      33% { transform: scale(1.1) translate(30px,-45px); }
+      66% { transform: scale(.9) translate(-20px,20px); }
+    }
+
+    .animate-blob { animation: pulseBlob 10s infinite alternate ease-in-out; }
+
+    .reveal-element {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .75s ease, transform .75s cubic-bezier(.16,1,.3,1);
+    }
+
+    .reveal-element.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .glow-button {
+      box-shadow: 0 0 15px rgba(212,175,55,.4);
+      animation: pulseGlow 2s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%,100% { box-shadow:0 0 12px rgba(212,175,55,.4); }
+      50% { box-shadow:0 0 22px rgba(212,175,55,.72); }
+    }
+
+    @keyframes carousel-slide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .animate-carousel-loop {
+      display: flex;
+      width: max-content;
+      animation: carousel-slide 15s linear infinite;
+    }
+
+    .animate-carousel-loop:hover { animation-play-state: paused; }
+
+    .pdf-viewer-box {
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: auto;
+      background: #ffffff;
+    }
+
+    .pdf-viewer-box iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      pointer-events: auto;
+      background: #ffffff;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #0077b6; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-thumb { background: #00b4d8; }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+
+<canvas id="particleCanvas"></canvas>
+
+<audio id="bgMusic" loop autoplay preload="auto">
+  <source src="https://newmp3.kz/uploads/mp3/3/kurmangazy-sagyrbaiuly---konil-tolkyny-kui.mp3" type="audio/mpeg">
+</audio>
+
+<nav class="sticky top-0 z-50 glass-nav">
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="#top" class="text-gold font-bold text-xl">
+      <i class="fa-solid fa-graduation-cap"></i> Gulsira.M
+    </a>
+
+    <div class="hidden md:flex items-center space-x-7 font-medium">
+      <a href="#top" class="hover:text-primary-light">Басты бет</a>
+      <a href="#home" class="hover:text-primary-light">Профиль</a>
+      <a href="#education" class="hover:text-primary-light">Білім</a>
+      <a href="#gallery" class="hover:text-primary-light">Галерея</a>
+      <a href="#achievements" class="hover:text-primary-light">Жетістіктер</a>
+      <a href="#contact" class="hover:text-primary-light">Мекенжай</a>
+    </div>
+
+    <div class="flex items-center space-x-3">
+      <button id="musicToggle" class="p-2.5 rounded-full bg-slate-200/80 dark:bg-slate-800 hover:scale-110 transition-all glow-button">
+        <i id="musicIcon" class="fa-solid fa-music"></i>
+      </button>
+
+      <button id="themeToggle" class="p-2.5 rounded-full bg-slate-200/80 dark:bg-slate-800 hover:scale-110 transition-all">
+        <i id="themeIcon" class="fa-solid fa-moon"></i>
+      </button>
+
+      <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-full bg-slate-200/80 dark:bg-slate-800">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobileMenu" class="hidden md:hidden px-6 py-4 space-y-3 glass-nav">
+    <a href="#top" class="block">Басты бет</a>
+    <a href="#home" class="block">Профиль</a>
+    <a href="#education" class="block">Білім</a>
+    <a href="#gallery" class="block">Галерея</a>
+    <a href="#achievements" class="block">Жетістіктер</a>
+    <a href="#contact" class="block">Мекенжай</a>
+  </div>
+</nav>
+
+<section id="top" class="top-video-hero px-6">
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="video.mp4" type="video/mp4">
+  </video>
+
+  <div class="max-w-7xl mx-auto w-full py-20">
+    <div class="max-w-4xl text-white space-y-7 reveal-element active">
+      <div class="inline-flex items-center gap-3 video-badge px-5 py-2 rounded-full text-sm font-bold">
+        <span class="w-2.5 h-2.5 rounded-full bg-gold animate-pulse"></span>
+        Электронды кәсіби портфолио
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-tight">
+        Мукамадиева Гульзира
+        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-gold via-white to-sky-300">
+          логопед-дефектолог
+        </span>
+      </h1>
+
+      <p class="text-lg sm:text-2xl text-white/85 max-w-3xl leading-relaxed">
+        Балалардың сөйлеу мәдениетін дамыту, логопедиялық кедергілерді түзету және заманауи педагогикалық технологияларды қолдану.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="#home" class="px-8 py-4 rounded-2xl bg-gold hover:bg-yellow-500 text-slate-950 font-extrabold transition-all shadow-xl hover:scale-[1.04]">
+          <i class="fa-solid fa-user-graduate mr-2"></i> Мұғалім туралы
+        </a>
+
+        <a href="#achievements" class="px-8 py-4 rounded-2xl bg-white/14 hover:bg-white/24 border border-white/30 backdrop-blur-md text-white font-extrabold transition-all hover:scale-[1.04]">
+          <i class="fa-solid fa-award mr-2"></i> Жетістіктер
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 max-w-3xl">
+        <div class="video-badge rounded-2xl p-5">
+          <div class="text-3xl font-black text-gold">19</div>
+          <p class="text-sm text-white/80 mt-1">жыл еңбек өтілі</p>
+        </div>
+        <div class="video-badge rounded-2xl p-5">
+          <div class="text-3xl font-black text-gold">№193</div>
+          <p class="text-sm text-white/80 mt-1">бөбекжай-балабақша</p>
+        </div>
+        <div class="video-badge rounded-2xl p-5">
+          <div class="text-3xl font-black text-gold">Алматы</div>
+          <p class="text-sm text-white/80 mt-1">Наурызбай ауданы</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#home" class="absolute bottom-7 left-1/2 -translate-x-1/2 text-white/85 hover:text-gold transition-colors z-20">
+    <i class="fa-solid fa-chevron-down text-3xl animate-bounce"></i>
+  </a>
+</section>
+
+<section id="home" class="py-16 px-6 max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <div class="lg:col-span-7 space-y-7 order-2 lg:order-1 text-center lg:text-left reveal-element">
+      <div class="inline-flex items-center space-x-2 bg-slate-200/80 dark:bg-slate-800/80 px-4 py-1.5 rounded-full text-sm font-semibold">
+        <span>🇰🇿 Кәсіби логопед-дефектолог маманы</span>
+      </div>
+
+      <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-gold">
+          Мукамадиева Гульзира
+        </span>
+      </h2>
+
+      <p class="text-xl sm:text-2xl font-medium text-slate-600 dark:text-slate-300 min-h-[40px]">
+        <span id="typewriterText"></span><span class="cursor">|</span>
+      </p>
+
+      <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 italic border-l-4 border-gold pl-4 bg-slate-100/40 dark:bg-slate-900/40 py-3 rounded-r-lg">
+        "Әр баланың еркін сөйлеп, өзін сенімді сезінуіне көмектесу және логопедиялық кедергілерді жою – менің кәсіби мақсатым."
+      </p>
+
+      <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+        <span class="px-4 py-2 rounded-xl bg-sky-100/80 dark:bg-sky-950/50 text-sky-800 dark:text-sky-300 font-medium">
+          <i class="fa-solid fa-school mr-2"></i> №193 бөбекжай-балабақша
+        </span>
+        <span class="px-4 py-2 rounded-xl bg-amber-100/80 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 font-medium">
+          <i class="fa-solid fa-location-dot mr-2"></i> Алматы қаласы, Наурызбай ауданы
+        </span>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 order-1 lg:order-2 flex justify-center relative reveal-element">
+      <div class="absolute -top-10 -left-10 w-32 h-32 bg-sky-200 dark:bg-sky-900/30 rounded-full blur-xl opacity-70 animate-blob"></div>
+      <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-amber-200 dark:bg-amber-900/30 rounded-full blur-xl opacity-70 animate-blob"></div>
+
+      <div class="relative w-72 h-96 sm:w-80 sm:h-[420px] rounded-3xl p-3 glass-card rotate-2 hover:rotate-0 shadow-2xl">
+        <img src="p1.png" alt="Мукамадиева Гульзира" class="w-full h-full object-cover rounded-2xl" onerror="this.src='https://placehold.co/400x520/e2e8f0/0f172a?text=p1.png'">
+        <div class="absolute top-4 left-4 text-gold/80 text-xl"><i class="fa-solid fa-feather-pointed floating-svg"></i></div>
+        <div class="absolute bottom-4 right-4 text-gold/80 text-xl"><i class="fa-solid fa-quote-right floating-svg-delayed"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education" class="py-14 px-6 reveal-element">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-10 space-y-4">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Білімі & Тәжірибесі</h2>
+      <div class="h-1.5 w-24 bg-gold mx-auto rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+        <span class="text-sm font-semibold text-gold">2000 – 2004 жж.</span>
+        <h3 class="text-xl font-bold mt-2">Логопед мамандығы, жоғары білім</h3>
+        <p class="text-slate-500 dark:text-slate-400 mt-1">Қазақ ұлттық қыздар педагогикалық университеті</p>
+        <p class="text-slate-600 dark:text-slate-300 mt-3">
+          Логопедия және дефектологияның қыр-сырын, сөйлеу тілінің бұзылуын түзету әдістерін меңгердім.
+        </p>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+        <span class="text-sm font-semibold text-gold">Қазіргі уақытта <span class="counter-val" data-target="19">0</span> жыл еңбек өтілі</span>
+        <h3 class="text-xl font-bold mt-2">Логопед маманы, педагог-модератор</h3>
+        <p class="text-slate-500 dark:text-slate-400 mt-1">№193 бөбекжай-балабақша, Алматы қ.</p>
+        <p class="text-slate-600 dark:text-slate-300 mt-3">
+          Балалардың сөйлеу мәдениетін көтеру және логопедиялық бұзылыстарды түзету бағытында жұмыс жасаймын.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="py-14 px-6 bg-slate-100/40 dark:bg-slate-900/20 reveal-element">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-10 space-y-4">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Жұмыс сәттерінен фотогалерея</h2>
+      <div class="h-1.5 w-24 bg-gold mx-auto rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md cursor-zoom-in" onclick="openLightbox('p9.jpg')">
+        <img src="p9.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/e2e8f0/0f172a?text=p9.jpg'">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+          <span class="text-xs font-bold text-gold uppercase tracking-wider mb-1">Ойын терапиясы</span>
+          <h4 class="text-white text-lg font-bold">Артикуляциялық жаттығулар мен дамыту ойындары</h4>
+        </div>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md cursor-zoom-in" onclick="openLightbox('p4.jpg')">
+        <img src="p4.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/e2e8f0/0f172a?text=p4.jpg'">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+          <span class="text-xs font-bold text-gold uppercase tracking-wider mb-1">Ұсақ моторика</span>
+          <h4 class="text-white text-lg font-bold">Саусақ пен қол моторикасын шыңдау әрекеттері</h4>
+        </div>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md cursor-zoom-in" onclick="openLightbox('p3.jpg')">
+        <img src="p3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/e2e8f0/0f172a?text=p3.jpg'">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+          <span class="text-xs font-bold text-gold uppercase tracking-wider mb-1">Когнитивті даму</span>
+          <h4 class="text-white text-lg font-bold">Зейінді шоғырландыру мен ойлау белсенділігі</h4>
+        </div>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md cursor-zoom-in" onclick="openLightbox('p8.jpg')">
+        <img src="p8.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/e2e8f0/0f172a?text=p8.jpg'">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+          <span class="text-xs font-bold text-gold uppercase tracking-wider mb-1">Дыбыс қою</span>
+          <h4 class="text-white text-lg font-bold">Дыбыстардың дұрыс айтылуын автоматизациялау</h4>
+        </div>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md cursor-zoom-in" onclick="openLightbox('p6.jpg')">
+        <img src="p6.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/e2e8f0/0f172a?text=p6.jpg'">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+          <span class="text-xs font-bold text-gold uppercase tracking-wider mb-1">Дефектология</span>
+          <h4 class="text-white text-lg font-bold">Жеке түзету сәттері мен логикалық тапсырмалар</h4>
+        </div>
+      </div>
+
+      <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md cursor-zoom-in" onclick="openLightbox('p2.jpg')">
+        <img src="p2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/e2e8f0/0f172a?text=p2.jpg'">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+          <span class="text-xs font-bold text-gold uppercase tracking-wider mb-1">Әлеуметтену</span>
+          <h4 class="text-white text-lg font-bold">Топтық интерактивті логопедиялық ойындар мен қарым-қатынас</h4>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="achievements" class="py-14 px-6 bg-slate-100/40 dark:bg-slate-900/30 reveal-element overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-10 space-y-4">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Ұстаздың жетістіктері мен құжаттары</h2>
+      <div class="h-1.5 w-24 bg-gold mx-auto rounded-full"></div>
+    </div>
+
+    <div class="relative w-full overflow-hidden py-4 rounded-3xl bg-slate-200/40 dark:bg-slate-950/40 border border-white/20 dark:border-slate-800">
+      <div id="carouselTrack" class="animate-carousel-loop flex space-x-8 px-4">
+
+        <div class="w-72 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-md flex-shrink-0 cursor-zoom-in" onclick="openLightbox('https://vibe-coding.diaoft.kz/uploads/img_6a09f5ad029e7.png')">
+          <img src="https://vibe-coding.diaoft.kz/uploads/img_6a09f5ad029e7.png" class="h-48 w-full object-cover rounded-xl">
+          <h4 class="font-bold text-sm text-center mt-3">Диплом</h4>
+        </div>
+
+        <div class="w-72 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-md flex-shrink-0 cursor-zoom-in" onclick="openLightbox('https://vibe-coding.diaoft.kz/uploads/img_6a0ac67f54625.jpg')">
+          <img src="https://vibe-coding.diaoft.kz/uploads/img_6a0ac67f54625.jpg" class="h-48 w-full object-cover rounded-xl">
+          <h4 class="font-bold text-sm text-center mt-3">Педагог-модератор куәлігі</h4>
+        </div>
+
+        <div class="w-72 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-md flex-shrink-0 cursor-zoom-in" onclick="openLightbox('https://vibe-coding.diaoft.kz/uploads/img_6a0ac60617f3c.jpg')">
+          <img src="https://vibe-coding.diaoft.kz/uploads/img_6a0ac60617f3c.jpg" class="h-48 w-full object-cover rounded-xl">
+          <h4 class="font-bold text-sm text-center mt-3">Сертификат</h4>
+        </div>
+
+        <div class="w-72 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-md flex-shrink-0 cursor-zoom-in" onclick="openLightbox('https://vibe-coding.diaoft.kz/uploads/img_6a0ac5a5afd6c.jpg')">
+          <img src="https://vibe-coding.diaoft.kz/uploads/img_6a0ac5a5afd6c.jpg" class="h-48 w-full object-cover rounded-xl">
+          <h4 class="font-bold text-sm text-center mt-3">Сертификат</h4>
+        </div>
+
+        <div class="w-72 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-md flex-shrink-0 cursor-zoom-in" onclick="openLightbox('https://vibe-coding.diaoft.kz/uploads/img_6a0ac535e125a.jpg')">
+          <img src="https://vibe-coding.diaoft.kz/uploads/img_6a0ac535e125a.jpg" class="h-48 w-full object-cover rounded-xl">
+          <h4 class="font-bold text-sm text-center mt-3">Құрмет грамотасы</h4>
+        </div>
+
+        <div class="w-72 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-md flex-shrink-0 cursor-zoom-in" onclick="openLightbox('https://vibe-coding.diaoft.kz/uploads/img_6a0ac4bd0cbd7.jpg')">
+          <img src="https://vibe-coding.diaoft.kz/uploads/img_6a0ac4bd0cbd7.jpg" class="h-48 w-full object-cover rounded-xl">
+          <h4 class="font-bold text-sm text-center mt-3">Сертификат</h4>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="mt-14 space-y-12">
+
+      <div>
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-2xl sm:text-3xl font-extrabold">Курстар</h3>
+          </div>
+          <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-300 items-center justify-center">
+            <i class="fa-solid fa-file-pdf text-2xl"></i>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all">
+            <div class="h-56 rounded-2xl bg-slate-100 dark:bg-slate-800 mb-5 border border-slate-200 dark:border-slate-700 pdf-viewer-box">
+              <iframe src="kurs1.pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" scrolling="yes" class="w-full h-full"></iframe>
+            </div>
+            <a href="kurs1.pdf" target="_blank" rel="noopener" class="block font-extrabold text-center hover:text-primary-light">Курс PDF</a>
+            <p class="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">Жаңа бетте ашу</p>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all">
+            <div class="h-56 rounded-2xl bg-slate-100 dark:bg-slate-800 mb-5 border border-slate-200 dark:border-slate-700 pdf-viewer-box">
+              <iframe src="kurs2.pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" scrolling="yes" class="w-full h-full"></iframe>
+            </div>
+            <a href="kurs2.pdf" target="_blank" rel="noopener" class="block font-extrabold text-center hover:text-primary-light">Курс PDF</a>
+            <p class="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">Жаңа бетте ашу</p>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all">
+            <div class="h-56 rounded-2xl bg-slate-100 dark:bg-slate-800 mb-5 border border-slate-200 dark:border-slate-700 pdf-viewer-box">
+              <iframe src="kurs3.pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" scrolling="yes" class="w-full h-full"></iframe>
+            </div>
+            <a href="kurs3.pdf" target="_blank" rel="noopener" class="block font-extrabold text-center hover:text-primary-light">Курс PDF</a>
+            <p class="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">Жаңа бетте ашу</p>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all">
+            <div class="h-56 rounded-2xl bg-slate-100 dark:bg-slate-800 mb-5 border border-slate-200 dark:border-slate-700 pdf-viewer-box">
+              <iframe src="kurs4.pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" scrolling="yes" class="w-full h-full"></iframe>
+            </div>
+            <a href="kurs4.pdf" target="_blank" rel="noopener" class="block font-extrabold text-center hover:text-primary-light">Курс PDF</a>
+            <p class="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">Жаңа бетте ашу</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-2xl sm:text-3xl font-extrabold">Мақалалар</h3>
+          </div>
+          <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-sky-100 dark:bg-sky-950/40 text-sky-600 dark:text-sky-300 items-center justify-center">
+            <i class="fa-solid fa-newspaper text-2xl"></i>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all">
+            <div class="h-72 rounded-2xl bg-slate-100 dark:bg-slate-800 mb-5 border border-slate-200 dark:border-slate-700 pdf-viewer-box">
+              <iframe src="makala1.pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" scrolling="yes" class="w-full h-full"></iframe>
+            </div>
+            <a href="makala1.pdf" target="_blank" rel="noopener" class="block font-extrabold text-center text-lg hover:text-primary-light">Мақала PDF</a>
+            <p class="text-sm text-center text-slate-500 dark:text-slate-400 mt-2">Жаңа бетте ашу</p>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all">
+            <div class="h-72 rounded-2xl bg-slate-100 dark:bg-slate-800 mb-5 border border-slate-200 dark:border-slate-700 pdf-viewer-box">
+              <iframe src="makala2.pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" scrolling="yes" class="w-full h-full"></iframe>
+            </div>
+            <a href="makala2.pdf" target="_blank" rel="noopener" class="block font-extrabold text-center text-lg hover:text-primary-light">Мақала PDF</a>
+            <p class="text-sm text-center text-slate-500 dark:text-slate-400 mt-2">Жаңа бетте ашу</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-2xl sm:text-3xl font-extrabold">Сертификаттар мен алғыс хаттар</h3>
+            <p class="text-slate-500 dark:text-slate-400 mt-1">6 JPG файл. Басқанда үлкейіп ашылады.</p>
+          </div>
+          <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 items-center justify-center">
+            <i class="fa-solid fa-award text-2xl"></i>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 cursor-zoom-in hover:-translate-y-2 hover:shadow-xl transition-all" onclick="openLightbox('cert1.jpg')">
+            <img src="cert1.jpg" class="h-56 w-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform" onerror="this.src='https://placehold.co/600x420/e2e8f0/0f172a?text=cert1.jpg'">
+            <h4 class="font-bold text-center mt-4">Сертификат / Алғыс хат</h4>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 cursor-zoom-in hover:-translate-y-2 hover:shadow-xl transition-all" onclick="openLightbox('cert2.jpg')">
+            <img src="cert2.jpg" class="h-56 w-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform" onerror="this.src='https://placehold.co/600x420/e2e8f0/0f172a?text=cert2.jpg'">
+            <h4 class="font-bold text-center mt-4">Сертификат / Алғыс хат</h4>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 cursor-zoom-in hover:-translate-y-2 hover:shadow-xl transition-all" onclick="openLightbox('cert3.jpg')">
+            <img src="cert3.jpg" class="h-56 w-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform" onerror="this.src='https://placehold.co/600x420/e2e8f0/0f172a?text=cert3.jpg'">
+            <h4 class="font-bold text-center mt-4">Сертификат / Алғыс хат</h4>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 cursor-zoom-in hover:-translate-y-2 hover:shadow-xl transition-all" onclick="openLightbox('cert4.jpg')">
+            <img src="cert4.jpg" class="h-56 w-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform" onerror="this.src='https://placehold.co/600x420/e2e8f0/0f172a?text=cert4.jpg'">
+            <h4 class="font-bold text-center mt-4">Сертификат / Алғыс хат</h4>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 cursor-zoom-in hover:-translate-y-2 hover:shadow-xl transition-all" onclick="openLightbox('cert5.jpg')">
+            <img src="cert5.jpg" class="h-56 w-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform" onerror="this.src='https://placehold.co/600x420/e2e8f0/0f172a?text=cert5.jpg'">
+            <h4 class="font-bold text-center mt-4">Сертификат / Алғыс хат</h4>
+          </div>
+
+          <div class="group bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-md border border-slate-100 dark:border-slate-800 cursor-zoom-in hover:-translate-y-2 hover:shadow-xl transition-all" onclick="openLightbox('cert6.jpg')">
+            <img src="cert6.jpg" class="h-56 w-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform" onerror="this.src='https://placehold.co/600x420/e2e8f0/0f172a?text=cert6.jpg'">
+            <h4 class="font-bold text-center mt-4">Сертификат / Алғыс хат</h4>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="py-14 px-6 reveal-element">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-10 space-y-4">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Мекенжай және байланыс</h2>
+      <div class="h-1.5 w-24 bg-gold mx-auto rounded-full"></div>
+      <p class="text-slate-600 dark:text-slate-400">№193 бөбекжай-балабақша орналасқан жері</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-4 space-y-4">
+        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+          <div class="w-12 h-12 rounded-full bg-sky-100 dark:bg-sky-900/50 flex items-center justify-center text-primary-light dark:text-primary-dark mb-4">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <h3 class="font-bold text-lg">Орналасқан жері</h3>
+          <p class="text-slate-500 dark:text-slate-400 mt-2">Алматы қаласы, Наурызбай ауданы</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+          <div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4">
+            <i class="fa-solid fa-school"></i>
+          </div>
+          <h3 class="font-bold text-lg">Жұмыс орны</h3>
+          <p class="text-slate-500 dark:text-slate-400 mt-2">№193 бөбекжай-балабақша</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-8 rounded-3xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <iframe
+          src="https://www.google.com/maps?q=Алматы%20қаласы%20Наурызбай%20ауданы%20№193%20бөбекжай-балабақша&output=embed"
+          width="100%"
+          height="430"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="py-8 px-6 border-t border-slate-200 dark:border-slate-800">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
+    <p>© 2026 Мукамадиева Гульзира. Электронды кәсіби портфолио.</p>
+    <p>Custom-built EdTech portfolio</p>
+  </div>
+</footer>
+
+<div id="lightbox" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+  <div class="relative max-w-4xl max-h-[90vh]">
+    <img id="lightboxImg" src="" class="rounded-lg shadow-2xl max-h-[85vh] object-contain mx-auto border-2 border-white/10">
+    <button id="closeLightbox" class="absolute -top-12 right-0 text-white hover:text-red-500 text-2xl">
+      <i class="fa-solid fa-circle-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<div id="toastContainer" class="fixed bottom-6 right-6 z-[200] space-y-3"></div>
+
+<script>
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  let particlesArray = [];
+  let mouse = { x: null, y: null, radius: 150 };
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initParticles();
+  }
+
+  class Particle {
+    constructor(x, y, directionX, directionY, size, color) {
+      this.x = x;
+      this.y = y;
+      this.directionX = directionX;
+      this.directionY = directionY;
+      this.size = size;
+      this.color = color;
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+
+    update() {
+      if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+      if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+      this.x += this.directionX;
+      this.y += this.directionY;
+      this.draw();
+    }
+  }
+
+  function initParticles() {
+    particlesArray = [];
+    let numberOfParticles = Math.min((canvas.width * canvas.height) / 12000, 80);
+    const isDark = document.documentElement.classList.contains('dark');
+    const particleColor = isDark ? 'rgba(0,180,216,.15)' : 'rgba(0,119,182,.12)';
+
+    for (let i = 0; i < numberOfParticles; i++) {
+      let size = Math.random() * 3 + 1;
+      let x = Math.random() * window.innerWidth;
+      let y = Math.random() * window.innerHeight;
+      let directionX = Math.random() * .4 - .2;
+      let directionY = Math.random() * .4 - .2;
+      particlesArray.push(new Particle(x, y, directionX, directionY, size, particleColor));
+    }
+  }
+
+  function animateParticles() {
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    particlesArray.forEach(p => p.update());
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+
+  const phrases = ["Кәсіби логопед-дефектолог", "Сөйлеу тілін түзету маманы", "Педагог-модератор"];
+  let currentPhraseIndex = 0;
+  let currentCharIndex = 0;
+  let isDeleting = false;
+  const typewriterEl = document.getElementById('typewriterText');
+
+  function playTypewriter() {
+    const currentPhrase = phrases[currentPhraseIndex];
+
+    if (isDeleting) {
+      typewriterEl.textContent = currentPhrase.substring(0, currentCharIndex - 1);
+      currentCharIndex--;
+    } else {
+      typewriterEl.textContent = currentPhrase.substring(0, currentCharIndex + 1);
+      currentCharIndex++;
+    }
+
+    let typingSpeed = isDeleting ? 40 : 80;
+
+    if (!isDeleting && currentCharIndex === currentPhrase.length) {
+      typingSpeed = 1800;
+      isDeleting = true;
+    } else if (isDeleting && currentCharIndex === 0) {
+      isDeleting = false;
+      currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+      typingSpeed = 450;
+    }
+
+    setTimeout(playTypewriter, typingSpeed);
+  }
+
+  function setupScrollReveal() {
+    const elements = document.querySelectorAll('.reveal-element');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          entry.target.querySelectorAll('.counter-val').forEach(counter => animateCounter(counter, parseInt(counter.dataset.target)));
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .15 });
+
+    elements.forEach(el => revealObserver.observe(el));
+  }
+
+  function animateCounter(element, target) {
+    let start = 0;
+    const duration = 1300;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        element.textContent = target;
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.floor(start);
+      }
+    }, 16);
+  }
+
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    const bgClass = type === 'success' ? 'bg-green-600' : 'bg-red-600';
+    toast.className = `translate-y-4 opacity-0 ${bgClass} text-white px-5 py-3.5 rounded-2xl shadow-xl transition-all duration-300`;
+    toast.innerHTML = `<span class="text-sm font-semibold">${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => toast.classList.remove('translate-y-4', 'opacity-0'), 50);
+    setTimeout(() => {
+      toast.classList.add('translate-y-4', 'opacity-0');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const closeLightbox = document.getElementById('closeLightbox');
+
+  function openLightbox(src) {
+    lightboxImg.src = src;
+    lightbox.classList.remove('hidden');
+    setTimeout(() => lightbox.classList.remove('opacity-0'), 50);
+  }
+
+  function hideLightbox() {
+    lightbox.classList.add('opacity-0');
+    setTimeout(() => lightbox.classList.add('hidden'), 300);
+  }
+
+  closeLightbox.onclick = hideLightbox;
+  lightbox.onclick = e => { if (e.target === lightbox) hideLightbox(); };
+
+  const musicBtn = document.getElementById('musicToggle');
+  const musicIcon = document.getElementById('musicIcon');
+  const bgMusic = document.getElementById('bgMusic');
+
+  let isAudioPlaying = false;
+  let userPausedMusic = false;
+  let autoStartBound = false;
+
+  function updateMusicIcon() {
+    if (!bgMusic.paused) {
+      musicIcon.className = 'fa-solid fa-volume-high';
+      musicBtn.classList.add('glow-button');
+      isAudioPlaying = true;
+    } else {
+      musicIcon.className = 'fa-solid fa-music';
+      musicBtn.classList.remove('glow-button');
+      isAudioPlaying = false;
+    }
+  }
+
+  function startMusic() {
+    if (userPausedMusic) return;
+
+    bgMusic.volume = 0.7;
+    bgMusic.muted = false;
+
+    const playPromise = bgMusic.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          updateMusicIcon();
+        })
+        .catch(() => {
+          updateMusicIcon();
+          enableMusicAfterUserAction();
+        });
+    }
+  }
+
+  function enableMusicAfterUserAction() {
+    if (autoStartBound) return;
+    autoStartBound = true;
+
+    const events = ['click', 'touchstart', 'keydown'];
+
+    const handler = () => {
+      events.forEach(eventName => {
+        document.removeEventListener(eventName, handler);
+      });
+
+      autoStartBound = false;
+
+      if (!userPausedMusic && bgMusic.paused) {
+        bgMusic.play()
+          .then(() => {
+            updateMusicIcon();
+          })
+          .catch(() => {
+            updateMusicIcon();
+          });
+      }
+    };
+
+    events.forEach(eventName => {
+      document.addEventListener(eventName, handler, { once: true });
+    });
+  }
+
+  function playMusicAuto() {
+    userPausedMusic = false;
+    startMusic();
+  }
+
+  bgMusic.addEventListener('play', updateMusicIcon);
+  bgMusic.addEventListener('pause', updateMusicIcon);
+  bgMusic.addEventListener('ended', updateMusicIcon);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && !userPausedMusic && bgMusic.paused) {
+      startMusic();
+    }
+  });
+
+  musicBtn.onclick = (e) => {
+    e.stopPropagation();
+
+    if (!bgMusic.paused) {
+      userPausedMusic = true;
+      bgMusic.pause();
+      updateMusicIcon();
+      showToast("Музыка тоқтатылды 🎵");
+    } else {
+      userPausedMusic = false;
+      bgMusic.play()
+        .then(() => {
+          updateMusicIcon();
+          showToast("Әуен қосылды 🎧");
+        })
+        .catch(() => {
+          updateMusicIcon();
+          showToast("Музыканы қосу үшін батырманы қайта басыңыз", "error");
+        });
+    }
+  };
+
+  const themeToggleBtn = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+    themeIcon.className = 'fa-solid fa-sun';
+  }
+
+  themeToggleBtn.onclick = () => {
+    document.documentElement.classList.toggle('dark');
+
+    if (document.documentElement.classList.contains('dark')) {
+      themeIcon.className = 'fa-solid fa-sun';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeIcon.className = 'fa-solid fa-moon';
+      localStorage.setItem('theme', 'light');
+    }
+
+    initParticles();
+  };
+
+  document.getElementById('mobileMenuBtn').onclick = () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  };
+
+  window.onload = () => {
+    resizeCanvas();
+    animateParticles();
+    playTypewriter();
+    setupScrollReveal();
+    playMusicAuto();
+  };
+</script>
+
+</body>
+</html>
